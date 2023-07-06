@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 
 function activate(context) {
-    let disposable = vscode.commands.registerCommand('extension.removeWhitespace', function () {
+    let disposable = vscode.commands.registerCommand('remove-whitespace', function () {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
@@ -39,6 +39,9 @@ function activate(context) {
         // Remove empty lines
         newText = newText.replace(/^\s*[\r\n]/gm, '');
 
+        // Remove all line breaks
+        newText = newText.replace(/(\r\n|\n|\r)/gm, "");
+
         // Apply the changes
         editor.edit(editBuilder => {
             const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
@@ -49,9 +52,8 @@ function activate(context) {
 
     context.subscriptions.push(disposable);
 }
-exports.activate = activate;
 
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
     activate,
