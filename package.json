@@ -9,13 +9,15 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:remove-whitespace"
+  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "remove-whitespace.helloWorld",
-        "title": "Hello World"
+        "command": "remove-whitespace",
+        "title": "Remove Whitespace"
       }
     ]
   },
