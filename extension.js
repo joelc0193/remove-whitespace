@@ -10,31 +10,31 @@ function activate(context) {
         let text = editor.document.getText();
 
         // Remove multiple spaces between words
-        let newText = text.replace(/ +/g, ' ');
+        let newText = text.replace(/ +(?= )/g, '');
 
         // Remove spaces before and after parentheses
-        newText = newText.replace(/ \(/g, '(');
-        newText = newText.replace(/\) /g, ')');
+        newText = newText.replace(/(?<=\w) \(/g, '(');
+        newText = newText.replace(/\) (?=\w)/g, ')');
 
         // Remove spaces before and after brackets
-        newText = newText.replace(/ \{/g, '{');
-        newText = newText.replace(/\} /g, '}');
+        newText = newText.replace(/(?<=\w) \{/g, '{');
+        newText = newText.replace(/\} (?=\w)/g, '}');
 
         // Remove spaces before and after commas
-        newText = newText.replace(/ ,/g, ',');
-        newText = newText.replace(/, /g, ',');
+        newText = newText.replace(/(?<=\w) ,/g, ',');
+        newText = newText.replace(/, (?=\w)/g, ',');
 
         // Remove spaces before and after colons
-        newText = newText.replace(/ :/g, ':');
-        newText = newText.replace(/: /g, ':');
+        newText = newText.replace(/(?<=\w) :/g, ':');
+        newText = newText.replace(/: (?=\w)/g, ':');
 
         // Remove spaces before and after semicolons
-        newText = newText.replace(/ ;/g, ';');
-        newText = newText.replace(/; /g, ';');
+        newText = newText.replace(/(?<=\w) ;/g, ';');
+        newText = newText.replace(/; (?=\w)/g, ';');
 
         // Remove spaces before and after equals signs
-        newText = newText.replace(/ =/g, '=');
-        newText = newText.replace(/= /g, '=');
+        newText = newText.replace(/(?<=\w) =/g, '=');
+        newText = newText.replace(/= (?=\w)/g, '=');
 
         // Remove empty lines
         newText = newText.replace(/^\s*[\r\n]/gm, '');
