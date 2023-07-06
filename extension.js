@@ -39,6 +39,11 @@ function activate(context) {
         // Remove empty lines
         newText = newText.replace(/^\s*[\r\n]/gm, '');
 
+
+        // Remove single line and multi-line comments, but not URLs
+        newText = newText.replace(/(\/\*[^]*?\*\/)|(\/\/(?![\w\d]*:\/\/).*)/g, '');
+
+
         // Remove all line breaks
         newText = newText.replace(/(\r\n|\n|\r)/gm, "");
 
