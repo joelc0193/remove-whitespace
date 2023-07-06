@@ -2,7 +2,7 @@
   "name": "remove-whitespace",
   "displayName": "Remove whitespace",
   "description": "Leaves only minimum necessary whitespace for Flutter to work",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.79.0"
   },
