@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 
 function activate(context) {
-    let disposable = vscode.commands.registerCommand('remove-whitespace', function () {
+    let disposable = vscode.commands.registerCommand('remove-whitespace', async function () {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
@@ -39,10 +39,20 @@ function activate(context) {
         // Remove empty lines
         newText = newText.replace(/^\s*[\r\n]/gm, '');
 
+        // Match URLs and replace them with a placeholder
+        let urls = [];
+        newText = newText.replace(/https?:\/\/[^\s]+/g, (match) => {
+            urls.push(match);
+            return 'URL_PLACEHOLDER';
+        });
 
-        // Remove single line and multi-line comments, but not URLs
-        newText = newText.replace(/(\/\*[^]*?\*\/)|(\/\/(?![\w\d]*:\/\/).*)/g, '');
+        // Now remove single line and multi-line comments
+        newText = newText.replace(/(\/\*[^]*?\*\/)|(\/\/.*)/g, '');
 
+        // Finally, restore the URLs
+        urls.forEach((url, index) => {
+            newText = newText.replace('URL_PLACEHOLDER', url);
+        });
 
         // Remove all line breaks
         newText = newText.replace(/(\r\n|\n|\r)/gm, "");
@@ -53,6 +63,17 @@ function activate(context) {
             const fullRange = new vscode.Range(0, 0, editor.document.lineCount - 1, lastLine.range.end.character);
             editBuilder.replace(fullRange, newText);
         });
+
+        let fullRange = new vscode.Range(
+            editor.document.positionAt(0),
+            editor.document.positionAt(editor.document.getText().length)
+        );
+
+        editor.selection = new vscode.Selection(fullRange.start, fullRange.end);
+        const clipboardy = await import('clipboardy');
+        clipboardy.default.writeSync(editor.document.getText(editor.selection));
+        vscode.commands.executeCommand('undo');
+
     });
 
     context.subscriptions.push(disposable);
