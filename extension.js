@@ -70,8 +70,7 @@ function activate(context) {
         );
 
         editor.selection = new vscode.Selection(fullRange.start, fullRange.end);
-        const clipboardy = await import('clipboardy');
-        clipboardy.default.writeSync(editor.document.getText(editor.selection));
+        vscode.env.clipboard.writeText(editor.document.getText(editor.selection));
         vscode.commands.executeCommand('undo');
 
     });
