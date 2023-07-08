@@ -58,21 +58,23 @@ function activate(context) {
         newText = newText.replace(/(\r\n|\n|\r)/gm, "");
 
         // Apply the changes
-        editor.edit(editBuilder => {
+        await editor.edit(async editBuilder => {
             const lastLine = editor.document.lineAt(editor.document.lineCount - 1);
             const fullRange = new vscode.Range(0, 0, editor.document.lineCount - 1, lastLine.range.end.character);
             editBuilder.replace(fullRange, newText);
         });
 
+        // Select text
         let fullRange = new vscode.Range(
             editor.document.positionAt(0),
             editor.document.positionAt(editor.document.getText().length)
         );
 
         editor.selection = new vscode.Selection(fullRange.start, fullRange.end);
+
+        // Undo text
         vscode.env.clipboard.writeText(editor.document.getText(editor.selection));
         vscode.commands.executeCommand('undo');
-
     });
 
     context.subscriptions.push(disposable);
@@ -84,3 +86,4 @@ module.exports = {
     activate,
     deactivate
 }
+
